@@ -1,0 +1,25 @@
+E-commerce PSP
+
+acquiring bank
+issuing bank
+Payment Card Industry Data Security Standard (PCI-DSS)
+
+card network (visa or mastercard)
+the card network's role is to ensure that the payment can be made from any bank in their network to any other bank in their netwok, anywhere around the world.
+
+1. customer
+
+2. merchant
+
+3. Payment Service Provider (PSP) - Service between objects e-shop and payment gateway and between subjects merchant, customer and financial institutions involved in processing payments. Stripe, PayPal, Ayden, Square, Braintree, Authorize.Net
+
+4. payment gateway - Transfers encrypted transaction data from the merchant's PSP to the processor. 
+
+5. payment processor - Sending transaction information between the merchant, the acquiring bank and the card network or issuer. Some banks act as both the acquiring bank and the payment processor.
+e.g. payments by visa or mastercard are powered by Swedbank when checking out in Rimi
+
+6. payment provider - institutions that 'actually' handle the money. Card networks, banks (direct debit or wire transfer), other financial institutions e.g. Paypal
+
+Let's say, for example, your PSP is set up to handle credit card payments directly, then for credit card transactions, your PSP would connect directly to the payment processor. However, if the customer chooses to pay with PayPal, then your PSP would route the transaction to PayPal's payment gateway, which would then handle the connection to the payment processor.
+
+
