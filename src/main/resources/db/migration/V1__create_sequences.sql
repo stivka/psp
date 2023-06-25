@@ -1,0 +1,1 @@
+CREATE SEQUENCE regular_seq START 1;

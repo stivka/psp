@@ -8,5 +8,5 @@ import net.stivka.psp.model.Payment;
 
 public interface PaymentRepository extends JpaRepository<Payment, Long> {
 //You would have to separate nested fields with underscore?
-    List<Payment> findByUser_Id(Long userId);
+    List<Payment> findByUserId(Long userId);
 }
