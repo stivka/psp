@@ -5,8 +5,6 @@ import java.math.BigDecimal;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import lombok.Data;
@@ -22,9 +20,11 @@ public class Payment {
     private BigDecimal amount;
 
     @ManyToOne
-    private User user;
+    private Customer customer;
+
+    @ManyToOne
+    private Merchant merchant;
 
     @Enumerated(EnumType.STRING)
     private PaymentMethod paymentMethod;
-
 }

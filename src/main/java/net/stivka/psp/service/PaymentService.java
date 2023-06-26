@@ -3,26 +3,30 @@ package net.stivka.psp.service;
 import java.util.List;
 import java.util.Optional;
 
-import javax.management.RuntimeErrorException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import net.stivka.psp.model.Payment;
-import net.stivka.psp.model.User;
+import net.stivka.psp.model.Customer;
+import net.stivka.psp.model.Merchant;
+import net.stivka.psp.repository.CustomerRepository;
+import net.stivka.psp.repository.MerchantRepository;
 import net.stivka.psp.repository.PaymentRepository;
-import net.stivka.psp.repository.UserRepository;
 
 @Service
 public class PaymentService {
 
     private final PaymentRepository paymentRepository;
-    private final UserRepository userRepository;
+    private final CustomerRepository customerRepository;
+    private final MerchantRepository merchantRepository;
 
     @Autowired
-    public PaymentService(PaymentRepository paymentRepository, UserRepository userRepository) {
+    public PaymentService(PaymentRepository paymentRepository, 
+                          CustomerRepository customerRepository, 
+                          MerchantRepository merchantRepository) {
         this.paymentRepository = paymentRepository;
-        this.userRepository = userRepository;
+        this.customerRepository = customerRepository;
+        this.merchantRepository = merchantRepository;
     }
 
     public List<Payment> getPayments() {
@@ -33,7 +37,17 @@ public class PaymentService {
         return paymentRepository.findById(id);
     }
 
-    public Payment savePayment(Payment payment) {
+    public Payment savePayment(Long customerId, Long merchantId, Payment payment) {
+        Optional<Customer> customerOptional = customerRepository.findById(customerId);
+        if (!customerOptional.isPresent()) {
+            throw new RuntimeException("Customer not found");
+        }
+        Optional<Merchant> merchantOptional = merchantRepository.findById(merchantId);
+        if (!merchantOptional.isPresent()) {
+            throw new RuntimeException("Merchant not found");
+        }
+        payment.setCustomer(customerOptional.get());
+        payment.setMerchant(merchantOptional.get());
         return paymentRepository.save(payment);
     }
 
@@ -41,19 +55,11 @@ public class PaymentService {
         paymentRepository.deleteById(id);
     }
 
-    public List<Payment> getUserPayments(Long userId) {
-        return paymentRepository.findByUserId(userId);
+    public List<Payment> getCustomerPayments(Long customerId) {
+        return paymentRepository.findByCustomerId(customerId);
     }
 
-    public Payment saveUserPayment(Long userId, Payment payment) {
-        Optional<User> userOptional = userRepository.findById(userId);
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
-            payment.setUser(user);
-            return paymentRepository.save(payment);
-        } else {
-            throw new RuntimeException("User not found");
-        }
-        
+    public List<Payment> getMerchantPayments(Long merchantId) {
+        return paymentRepository.findByMerchantId(merchantId);
     }
 }

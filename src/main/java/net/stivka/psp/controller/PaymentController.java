@@ -40,9 +40,10 @@ public class PaymentController {
         return payment.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/{userId}")
-    public ResponseEntity<Payment> savePayment(@PathVariable Long userId, @RequestBody Payment payment) {
-        Payment savedPayment = paymentService.saveUserPayment(userId, payment);
+    @PostMapping("/{customerId}/{merchantId}")
+    public ResponseEntity<Payment> savePayment(@PathVariable Long customerId, @PathVariable Long merchantId,
+            @RequestBody Payment payment) {
+        Payment savedPayment = paymentService.savePayment(customerId, merchantId, payment);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedPayment);
     }
 
@@ -52,9 +53,15 @@ public class PaymentController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/users/{userId}")
-    public ResponseEntity<List<Payment>> getPaymentsByUserId(@PathVariable Long userId) {
-        List<Payment> payments = paymentService.getUserPayments(userId);
+    @GetMapping("/customers/{customerId}")
+    public ResponseEntity<List<Payment>> getPaymentsByCustomerId(@PathVariable Long customerId) {
+        List<Payment> payments = paymentService.getCustomerPayments(customerId);
+        return ResponseEntity.ok(payments);
+    }
+
+    @GetMapping("/merchants/{merchantId}")
+    public ResponseEntity<List<Payment>> getPaymentsByMerchantId(@PathVariable Long merchantId) {
+        List<Payment> payments = paymentService.getMerchantPayments(merchantId);
         return ResponseEntity.ok(payments);
     }
 }
