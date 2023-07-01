@@ -1,1 +1,3 @@
-CREATE SEQUENCE regular_seq START 1;
+CREATE SEQUENCE customer_seq START 1;
+CREATE SEQUENCE merchant_seq START 1;
+CREATE SEQUENCE payment_seq START 1;

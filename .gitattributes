@@ -1,0 +1,5 @@
+# Set default behavior to automatically normalize line endings.
+* text=auto
+
+# Define line endings for specific file types.
+*.sql text eol=lf

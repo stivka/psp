@@ -7,7 +7,7 @@ plugins {
 }
 
 flyway {
-    url = 'jdbc:postgresql://localhost:5432/postgres'
+    url = 'jdbc:postgresql://localhost:5432/psp'
     user = 'psp_admin'
     password = 'psp'
     locations = ['classpath:db/migration']

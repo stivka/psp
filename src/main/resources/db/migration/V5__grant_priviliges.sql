@@ -1,0 +1,17 @@
+GRANT USAGE ON SCHEMA public TO psp_service;
+GRANT SELECT,
+    INSERT,
+    UPDATE,
+    DELETE ON ALL TABLES IN SCHEMA public TO psp_service;
+GRANT USAGE ON ALL SEQUENCES IN SCHEMA public TO psp_service;
+GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA public TO psp_service;
+-- If you want these permissions to be applied to future tables as well
+ALTER DEFAULT PRIVILEGES IN SCHEMA public
+GRANT SELECT,
+    INSERT,
+    UPDATE,
+    DELETE ON TABLES TO psp_service;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public
+GRANT USAGE ON SEQUENCES TO psp_service;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public
+GRANT EXECUTE ON FUNCTIONS TO psp_service;
