@@ -72,7 +72,7 @@ VALUES
             FROM merchant
             WHERE email = 'merchant.one@example.com'
         ),
-        'Credit Card',
+        'BANK_TRANSFER',
         'psp_service', 
         CURRENT_TIMESTAMP, 
         'psp_service', 
@@ -90,7 +90,7 @@ VALUES
             FROM merchant
             WHERE email = 'merchant.two@example.com'
         ),
-        'Debit Card',
+        'VISA',
         'psp_service', 
         CURRENT_TIMESTAMP, 
         'psp_service', 
@@ -108,7 +108,7 @@ VALUES
             FROM merchant
             WHERE email = 'merchant.three@example.com'
         ),
-        'Paypal',
+        'PAYPAL',
         'psp_service', 
         CURRENT_TIMESTAMP, 
         'psp_service', 

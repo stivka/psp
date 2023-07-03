@@ -3,7 +3,6 @@ package net.stivka.psp.service;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import net.stivka.psp.model.Payment;
@@ -20,7 +19,6 @@ public class PaymentService {
     private final CustomerRepository customerRepository;
     private final MerchantRepository merchantRepository;
 
-    @Autowired
     public PaymentService(PaymentRepository paymentRepository, 
                           CustomerRepository customerRepository, 
                           MerchantRepository merchantRepository) {

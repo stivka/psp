@@ -1,5 +1,5 @@
 -- The V7__insert_api_keys.sql file
-INSERT INTO api_key (key, merchant_id)
+INSERT INTO api_key (key_value, merchant_id)
 VALUES (
         'key1',
         (

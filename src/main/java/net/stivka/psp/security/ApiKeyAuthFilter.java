@@ -3,6 +3,7 @@ package net.stivka.psp.security;
 import java.io.IOException;
 import java.util.Optional;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.GenericFilterBean;
 
 import jakarta.servlet.FilterChain;
@@ -26,19 +27,18 @@ public class ApiKeyAuthFilter extends GenericFilterBean {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
+
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         String apiKey = httpRequest.getHeader(headerName);
-        if (apiKey == null || apiKey.isEmpty()) {
-            ((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED, "API key missing");
-            return;
-        }
 
         Optional<ApiKey> optionalApiKey = apiKeyService.getApiKey(apiKey);
-
         if (!optionalApiKey.isPresent()) {
             ((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid API key");
             return;
         }
+
+        ApiKeyAuthentication authentication = new ApiKeyAuthentication(optionalApiKey.get());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
 
         chain.doFilter(request, response);
     }
