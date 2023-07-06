@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import net.stivka.psp.model.Merchant;
 import net.stivka.psp.repository.ApiKeyRepository;
 import net.stivka.psp.security.ApiKey;
 
@@ -17,5 +18,9 @@ public class ApiKeyService {
 
     public Optional<ApiKey> getApiKey(String apiKey) {
         return apiKeyRepository.findByKey(apiKey);
+    }
+
+    public boolean validateApiKeyForMerchant(String apiKey, Merchant merchant) {
+        return apiKeyRepository.existsByKeyAndMerchant(apiKey, merchant);
     }
 }

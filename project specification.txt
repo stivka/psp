@@ -1,5 +1,7 @@
 E-commerce PSP
 
+use Kafka for message queue practice
+
 acquiring bank
 issuing bank
 Payment Card Industry Data Security Standard (PCI-DSS)

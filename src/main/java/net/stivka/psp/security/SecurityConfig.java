@@ -9,6 +9,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import net.stivka.psp.service.ApiKeyService;
+import net.stivka.psp.service.MerchantService;
 
 @Configuration
 @EnableWebSecurity
@@ -17,10 +18,13 @@ public class SecurityConfig {
     @Autowired
     private ApiKeyService apiKeyService;
 
+    @Autowired
+    private MerchantService merchantService;
+
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .addFilterBefore(new ApiKeyAuthFilter("X-API-Key", apiKeyService),
+                .addFilterBefore(new ApiKeyAuthFilter("X-API-Key", apiKeyService, merchantService),
                         UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(authorize -> authorize
                         .anyRequest().authenticated());
