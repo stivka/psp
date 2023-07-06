@@ -22,6 +22,9 @@ public class ApiKey {
     private String key;
 
     @ManyToOne
-    @JoinColumn(name = "merchant_id", nullable = false)
+    @JoinColumn(name = "merchant_id")
     private Merchant merchant;
+
+    @Column(name = "key_role", nullable = false)
+    private String role; // "ADMIN" or "MERCHANT"
 }

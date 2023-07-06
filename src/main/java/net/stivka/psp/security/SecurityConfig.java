@@ -27,6 +27,7 @@ public class SecurityConfig {
                 .addFilterBefore(new ApiKeyAuthFilter("X-API-Key", apiKeyService, merchantService),
                         UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/api/**").authenticated()
                         .anyRequest().authenticated());
 
         return http.build();

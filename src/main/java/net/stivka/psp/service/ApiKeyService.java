@@ -23,4 +23,14 @@ public class ApiKeyService {
     public boolean validateApiKeyForMerchant(String apiKey, Merchant merchant) {
         return apiKeyRepository.existsByKeyAndMerchant(apiKey, merchant);
     }
+
+    public boolean isAdminApiKey(String apiKey) {
+        Optional<ApiKey> optionalApiKey = apiKeyRepository.findByKey(apiKey);
+        return optionalApiKey.isPresent() && optionalApiKey.get().getRole().equalsIgnoreCase("ADMIN");
+    }
+
+    public boolean isMerchantApiKey(String apiKey) {
+        Optional<ApiKey> optionalApiKey = apiKeyRepository.findByKey(apiKey);
+        return optionalApiKey.isPresent() && optionalApiKey.get().getRole().equalsIgnoreCase("MERCHANT");
+    }
 }

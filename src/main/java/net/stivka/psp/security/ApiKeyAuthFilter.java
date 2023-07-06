@@ -1,8 +1,12 @@
 package net.stivka.psp.security;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.GenericFilterBean;
 
@@ -38,14 +42,22 @@ public class ApiKeyAuthFilter extends GenericFilterBean {
 
         String path = httpRequest.getRequestURI();
         String merchantId = path.split("/")[path.split("/").length - 1];
-        Optional<Merchant> merchant = merchantService.findById(Long.parseLong(merchantId));        
+        Optional<Merchant> merchant = merchantService.findById(Long.parseLong(merchantId));
 
-        if (!optionalApiKey.isPresent() || !apiKeyService.validateApiKeyForMerchant(apiKey, merchant.get())) {
+        if (!optionalApiKey.isPresent() || !(apiKeyService.validateApiKeyForMerchant(apiKey, merchant.get()) ||
+                apiKeyService.isAdminApiKey(apiKey))) {
             ((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid API key");
             return;
         }
 
-        ApiKeyAuthentication authentication = new ApiKeyAuthentication(optionalApiKey.get());
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        if (apiKeyService.isAdminApiKey(apiKey)) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        } else if (apiKeyService.isMerchantApiKey(apiKey)) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_MERCHANT"));
+        }
+
+        ApiKeyAuthentication authentication = new ApiKeyAuthentication(optionalApiKey.get(), authorities);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         chain.doFilter(request, response);

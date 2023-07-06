@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,40 +27,40 @@ public class PaymentController {
         this.paymentService = paymentService;
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping
     public ResponseEntity<List<Payment>> getAllPayments() {
         List<Payment> payments = paymentService.getPayments();
         return ResponseEntity.ok(payments);
     }
 
+    @PreAuthorize("hasRole('ROLE_MERCHANT') or hasRole('ROLE_ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<Payment> getPaymentById(@PathVariable Long id) {
         Optional<Payment> payment = paymentService.getPayment(id);
         return payment.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/{customerId}/{merchantId}")
-    public ResponseEntity<Payment> savePayment(@PathVariable Long customerId, @PathVariable Long merchantId,
-            @RequestBody Payment payment) {
-        Payment savedPayment = paymentService.savePayment(customerId, merchantId, payment);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedPayment);
-    }
-
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePayment(@PathVariable Long id) {
         paymentService.deletePayment(id);
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/customers/{customerId}")
-    public ResponseEntity<List<Payment>> getPaymentsByCustomerId(@PathVariable Long customerId) {
-        List<Payment> payments = paymentService.getCustomerPayments(customerId);
-        return ResponseEntity.ok(payments);
-    }
-
+    @PreAuthorize("hasRole('ROLE_MERCHANT') or hasRole('ROLE_ADMIN')")
     @GetMapping("/merchants/{merchantId}")
     public ResponseEntity<List<Payment>> getPaymentsByMerchantId(@PathVariable Long merchantId) {
         List<Payment> payments = paymentService.getMerchantPayments(merchantId);
         return ResponseEntity.ok(payments);
     }
+
+    @PreAuthorize("hasRole('ROLE_MERCHANT') or hasRole('ROLE_ADMIN')")
+    @PostMapping("/{merchantId}/{customerId}")
+    public ResponseEntity<Payment> savePayment(@PathVariable Long customerId, @PathVariable Long merchantId,
+            @RequestBody Payment payment) {
+        Payment savedPayment = paymentService.savePayment(customerId, merchantId, payment);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedPayment);
+    }
+    // PUT /payments/{paymentId}: To update a payment, such as marking it as completed or failed.
 }

@@ -19,4 +19,8 @@ public class MerchantService {
     public Optional<Merchant> findById(Long id) {
         return merchantRepository.findById(id);
     }
+
+    public Merchant saveMerchant() {
+        return null;
+    }
 }
