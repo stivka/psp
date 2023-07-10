@@ -40,13 +40,18 @@ public class ApiKeyAuthFilter extends GenericFilterBean {
         String apiKey = httpRequest.getHeader(headerName);
         Optional<ApiKey> optionalApiKey = apiKeyService.getApiKey(apiKey);
 
-        String path = httpRequest.getRequestURI();
-        String merchantId = path.split("/")[path.split("/").length - 1];
-        Optional<Merchant> merchant = merchantService.findById(Long.parseLong(merchantId));
-
-        if (!optionalApiKey.isPresent() || !(apiKeyService.validateApiKeyForMerchant(apiKey, merchant.get()) ||
-                apiKeyService.isAdminApiKey(apiKey))) {
+        // api key should always be present, if the apiKey is not present, deny access.
+        if (!optionalApiKey.isPresent()) {
             ((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid API key");
+            return;
+        }
+
+        String merchantId = httpRequest.getParameter("merchantId");
+        boolean merchantPresent = merchantId != null && !merchantId.isEmpty();
+
+        // If it's not admin and there is no merchantId, deny access
+        if (!apiKeyService.isAdminApiKey(apiKey) && !merchantPresent) {
+            ((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED, "Merchant ID is required");
             return;
         }
 

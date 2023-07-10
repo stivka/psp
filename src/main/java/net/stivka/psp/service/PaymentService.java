@@ -35,17 +35,17 @@ public class PaymentService {
         return paymentRepository.findById(id);
     }
 
-    public Payment savePayment(Long customerId, Long merchantId, Payment payment) {
-        Optional<Customer> customerOptional = customerRepository.findById(customerId);
-        if (!customerOptional.isPresent()) {
-            throw new RuntimeException("Customer not found");
-        }
+    public Payment savePayment(Long merchantId, Long customerId, Payment payment) {
         Optional<Merchant> merchantOptional = merchantRepository.findById(merchantId);
         if (!merchantOptional.isPresent()) {
             throw new RuntimeException("Merchant not found");
         }
-        payment.setCustomer(customerOptional.get());
+        Optional<Customer> customerOptional = customerRepository.findById(customerId);
+        if (!customerOptional.isPresent()) {
+            throw new RuntimeException("Customer not found");
+        }
         payment.setMerchant(merchantOptional.get());
+        payment.setCustomer(customerOptional.get());
         return paymentRepository.save(payment);
     }
 

@@ -6,19 +6,23 @@ import java.util.Optional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.annotation.Nonnull;
 import net.stivka.psp.model.Payment;
 import net.stivka.psp.service.PaymentService;
 
 @RestController
 @RequestMapping("/api/payments")
+@Validated
 public class PaymentController {
 
     private final PaymentService paymentService;
@@ -49,18 +53,22 @@ public class PaymentController {
     }
 
     @PreAuthorize("hasRole('ROLE_MERCHANT') or hasRole('ROLE_ADMIN')")
-    @GetMapping("/merchants/{merchantId}")
-    public ResponseEntity<List<Payment>> getPaymentsByMerchantId(@PathVariable Long merchantId) {
+    @GetMapping("/merchant")
+    public ResponseEntity<List<Payment>> getPaymentsByMerchantId(@RequestParam Long merchantId) {
         List<Payment> payments = paymentService.getMerchantPayments(merchantId);
         return ResponseEntity.ok(payments);
     }
 
     @PreAuthorize("hasRole('ROLE_MERCHANT') or hasRole('ROLE_ADMIN')")
-    @PostMapping("/{merchantId}/{customerId}")
-    public ResponseEntity<Payment> savePayment(@PathVariable Long customerId, @PathVariable Long merchantId,
-            @RequestBody Payment payment) {
-        Payment savedPayment = paymentService.savePayment(customerId, merchantId, payment);
+    @PostMapping(consumes = "application/json")
+    public ResponseEntity<Payment> savePayment(
+            @RequestParam @Nonnull Long merchantId,
+            @RequestParam @Nonnull Long customerId,
+            @RequestBody @Validated Payment payment) {
+        Payment savedPayment = paymentService.savePayment(merchantId, customerId, payment);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedPayment);
     }
-    // PUT /payments/{paymentId}: To update a payment, such as marking it as completed or failed.
+
+    // PUT /payments/{paymentId}: To update a payment, such as marking it as
+    // completed or failed.
 }
