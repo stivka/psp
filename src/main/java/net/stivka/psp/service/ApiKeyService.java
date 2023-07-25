@@ -26,11 +26,11 @@ public class ApiKeyService {
 
     public boolean isAdminApiKey(String apiKey) {
         Optional<ApiKey> optionalApiKey = apiKeyRepository.findByKey(apiKey);
-        return optionalApiKey.isPresent() && optionalApiKey.get().getRole().equalsIgnoreCase("ADMIN");
+        return optionalApiKey.isPresent() && optionalApiKey.get().getRole().equalsIgnoreCase("ROLE_ADMIN");
     }
 
     public boolean isMerchantApiKey(String apiKey) {
         Optional<ApiKey> optionalApiKey = apiKeyRepository.findByKey(apiKey);
-        return optionalApiKey.isPresent() && optionalApiKey.get().getRole().equalsIgnoreCase("MERCHANT");
+        return optionalApiKey.isPresent() && optionalApiKey.get().getRole().equalsIgnoreCase("ROLE_MERCHANT");
     }
 }

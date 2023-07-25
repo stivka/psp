@@ -20,19 +20,19 @@ public class ApiKeyAuthentication implements Authentication {
 
     @Override
     public String getName() {
-        return apiKey.getMerchant().getName();
+        // The API key is the "name" in this case
+        return apiKey.getKey();
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.authorities;
-
     }
 
     @Override
     public Object getCredentials() {
-        return apiKey.getKey(); // the API key is the "credential" in this case
-
+        // The API key is the "credential" in this case
+        return apiKey.getKey();
     }
 
     @Override
@@ -42,7 +42,8 @@ public class ApiKeyAuthentication implements Authentication {
 
     @Override
     public Object getPrincipal() {
-        return apiKey.getMerchant();
+        // The apiKey object is the "principal" in this case
+        return apiKey;
     }
 
     @Override

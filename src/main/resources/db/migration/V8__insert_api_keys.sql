@@ -1,5 +1,5 @@
 -- The V7__insert_api_keys.sql file
-INSERT INTO api_key (key_value, merchant_id, key_role)
+INSERT INTO api_key (key_value, merchant_id, key_role, created_by, creation_date)
 VALUES (
         'key1',
         (
@@ -7,7 +7,9 @@ VALUES (
             FROM merchant
             WHERE email = 'merchant.one@example.com'
         ),
-        'MERCHANT'
+        'ROLE_MERCHANT',
+        'psp_service',
+        CURRENT_TIMESTAMP
     ),
     (
         'key2',
@@ -16,7 +18,9 @@ VALUES (
             FROM merchant
             WHERE email = 'merchant.two@example.com'
         ),
-        'MERCHANT'
+        'ROLE_MERCHANT',
+        'psp_service',
+        CURRENT_TIMESTAMP
     ),
     (
         'key3',
@@ -25,6 +29,14 @@ VALUES (
             FROM merchant
             WHERE email = 'merchant.three@example.com'
         ),
-        'MERCHANT'
+        'ROLE_MERCHANT',
+        'psp_service',
+        CURRENT_TIMESTAMP
     ),
-    ('key4', null, 'ADMIN');
+    (
+        'key4',
+        null,
+        'ROLE_ADMIN',
+        'psp_service',
+        CURRENT_TIMESTAMP
+    );

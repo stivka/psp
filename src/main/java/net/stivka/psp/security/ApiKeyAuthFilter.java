@@ -46,13 +46,19 @@ public class ApiKeyAuthFilter extends GenericFilterBean {
             return;
         }
 
+        ApiKey actualApiKey = optionalApiKey.get();
         String merchantId = httpRequest.getParameter("merchantId");
         boolean merchantPresent = merchantId != null && !merchantId.isEmpty();
 
-        // If it's not admin and there is no merchantId, deny access
-        if (!apiKeyService.isAdminApiKey(apiKey) && !merchantPresent) {
-            ((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED, "Merchant ID is required");
-            return;
+        // If it's not admin, merchantId is required and should match the merchantId in
+        // the apiKey
+        if (!apiKeyService.isAdminApiKey(apiKey)) {
+            if (!merchantPresent || (actualApiKey.getMerchant() != null &&
+                    !actualApiKey.getMerchant().getId().toString().equals(merchantId))) {
+                ((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED,
+                        "Valid Merchant ID is required");
+                return;
+            }
         }
 
         List<GrantedAuthority> authorities = new ArrayList<>();
@@ -62,7 +68,7 @@ public class ApiKeyAuthFilter extends GenericFilterBean {
             authorities.add(new SimpleGrantedAuthority("ROLE_MERCHANT"));
         }
 
-        ApiKeyAuthentication authentication = new ApiKeyAuthentication(optionalApiKey.get(), authorities);
+        ApiKeyAuthentication authentication = new ApiKeyAuthentication(actualApiKey, authorities);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         chain.doFilter(request, response);
