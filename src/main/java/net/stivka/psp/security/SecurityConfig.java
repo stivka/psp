@@ -6,10 +6,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import net.stivka.psp.service.ApiKeyService;
-import net.stivka.psp.service.MerchantService;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+
+import net.stivka.psp.service.UserService;
+
+import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
@@ -17,20 +20,16 @@ import net.stivka.psp.service.MerchantService;
 public class SecurityConfig {
 
     @Autowired
-    private ApiKeyService apiKeyService;
-
-    @Autowired
-    private MerchantService merchantService;
+    private UserService userService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/api/payments/**").hasAnyRole("MERCHANT", "ADMIN")
-                        .requestMatchers("/api/customers/**").hasAnyRole("MERCHANT", "ADMIN")
-                        .anyRequest().authenticated())
-                .addFilterBefore(new ApiKeyAuthFilter("X-API-Key", apiKeyService, merchantService),
-                        UsernamePasswordAuthenticationFilter.class);
+                .csrf(withDefaults())
+                .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(new ApiKeyAuthFilter("X-API-Key", userService), BasicAuthenticationFilter.class)
+                .authorizeHttpRequests(requests -> requests
+                        .anyRequest().authenticated());
         return http.build();
     }
 }

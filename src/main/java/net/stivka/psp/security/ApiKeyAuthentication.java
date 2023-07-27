@@ -1,8 +1,7 @@
 package net.stivka.psp.security;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -10,23 +9,16 @@ public class ApiKeyAuthentication implements Authentication {
 
     private ApiKey apiKey;
     private boolean authenticated;
-    private List<GrantedAuthority> authorities;
 
-    public ApiKeyAuthentication(ApiKey apiKey, List<GrantedAuthority> authorities) {
+    public ApiKeyAuthentication(ApiKey apiKey) {
         this.apiKey = apiKey;
         this.authenticated = apiKey != null;
-        this.authorities = authorities;
     }
 
     @Override
     public String getName() {
         // The API key is the "name" in this case
         return apiKey.getKey();
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.authorities;
     }
 
     @Override
@@ -54,5 +46,11 @@ public class ApiKeyAuthentication implements Authentication {
     @Override
     public void setAuthenticated(boolean isAuthenticated) throws IllegalArgumentException {
         this.authenticated = isAuthenticated;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        // As roles are not being used, return an empty list of GrantedAuthority
+        return new ArrayList<GrantedAuthority>();
     }
 }

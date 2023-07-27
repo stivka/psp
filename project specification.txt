@@ -24,4 +24,12 @@ e.g. payments by visa or mastercard are powered by Swedbank when checking out in
 
 Let's say, for example, your PSP is set up to handle credit card payments directly, then for credit card transactions, your PSP would connect directly to the payment processor. However, if the customer chooses to pay with PayPal, then your PSP would route the transaction to PayPal's payment gateway, which would then handle the connection to the payment processor.
 
+TODO:
+Use JWT tokens instead of API keys, which is more in line with the stateless manner of
+REST APIs. No need to look up users with every request and they are tamper-proof. 
+TLS
+OpenApi
+Host on cloud
+
+
 

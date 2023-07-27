@@ -10,28 +10,20 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.SequenceGenerator;
 import lombok.Data;
-import net.stivka.psp.model.Merchant;
 
 @Data
 @Entity
 public class ApiKey {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "api_key_seq_generator")
+    @SequenceGenerator(name = "api_key_seq_generator", sequenceName = "api_key_seq", allocationSize = 1)
     private Long id;
 
     @Column(name = "key_value", nullable = false)
     private String key;
-
-    @OneToOne
-    @JoinColumn(name = "merchant_id", nullable = true)
-    private Merchant merchant;
-
-    @Column(name = "key_role", nullable = false)
-    private String role; // "ROLE_ADMIN" or "ROLE_MERCHANT"
 
     // we don't want api keys to me modified after creation, so lets add only creation fields
     @CreatedBy

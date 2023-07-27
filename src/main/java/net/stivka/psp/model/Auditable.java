@@ -29,5 +29,4 @@ public abstract class Auditable<U> {
     @LastModifiedDate
     protected Instant lastModifiedDate;
 
-    // getters and setters
 }

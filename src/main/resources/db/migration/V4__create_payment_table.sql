@@ -1,3 +1,5 @@
+CREATE SEQUENCE payment_seq START 1;
+
 CREATE TABLE payment (
   id BIGINT DEFAULT nextval('payment_seq') PRIMARY KEY,
   amount DECIMAL(10, 2) NOT NULL,

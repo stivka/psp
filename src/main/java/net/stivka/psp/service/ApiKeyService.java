@@ -4,7 +4,6 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import net.stivka.psp.model.Merchant;
 import net.stivka.psp.repository.ApiKeyRepository;
 import net.stivka.psp.security.ApiKey;
 
@@ -18,19 +17,5 @@ public class ApiKeyService {
 
     public Optional<ApiKey> getApiKey(String apiKey) {
         return apiKeyRepository.findByKey(apiKey);
-    }
-
-    public boolean validateApiKeyForMerchant(String apiKey, Merchant merchant) {
-        return apiKeyRepository.existsByKeyAndMerchant(apiKey, merchant);
-    }
-
-    public boolean isAdminApiKey(String apiKey) {
-        Optional<ApiKey> optionalApiKey = apiKeyRepository.findByKey(apiKey);
-        return optionalApiKey.isPresent() && optionalApiKey.get().getRole().equalsIgnoreCase("ROLE_ADMIN");
-    }
-
-    public boolean isMerchantApiKey(String apiKey) {
-        Optional<ApiKey> optionalApiKey = apiKeyRepository.findByKey(apiKey);
-        return optionalApiKey.isPresent() && optionalApiKey.get().getRole().equalsIgnoreCase("ROLE_MERCHANT");
     }
 }

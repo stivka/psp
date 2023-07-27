@@ -31,35 +31,36 @@ public class PaymentController {
         this.paymentService = paymentService;
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public ResponseEntity<List<Payment>> getAllPayments() {
         List<Payment> payments = paymentService.getPayments();
         return ResponseEntity.ok(payments);
     }
 
-    @PreAuthorize("hasRole('MERCHANT') or hasRole('ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<Payment> getPaymentById(@PathVariable Long id) {
         Optional<Payment> payment = paymentService.getPayment(id);
         return payment.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePayment(@PathVariable Long id) {
         paymentService.deletePayment(id);
         return ResponseEntity.noContent().build();
     }
 
-    @PreAuthorize("hasRole('MERCHANT') or hasRole('ADMIN')")
-    @GetMapping("/merchant")
-    public ResponseEntity<List<Payment>> getPaymentsByMerchantId(@RequestParam Long merchantId) {
+    @GetMapping("/customer/{customerId}")
+    public ResponseEntity<List<Payment>> getPaymentsByCustomerId(@PathVariable Long customerId) {
+        List<Payment> payments = paymentService.getCustomerPayments(customerId);
+        return ResponseEntity.ok(payments);
+    }
+
+    @GetMapping("/merchant/{merchantId}")
+    public ResponseEntity<List<Payment>> getPaymentsByMerchantId(@PathVariable Long merchantId) {
         List<Payment> payments = paymentService.getMerchantPayments(merchantId);
         return ResponseEntity.ok(payments);
     }
 
-    @PreAuthorize("hasRole('MERCHANT') or hasRole('ADMIN')")
     @PostMapping(consumes = "application/json")
     public ResponseEntity<Payment> savePayment(
             @RequestParam @Nonnull Long merchantId,
