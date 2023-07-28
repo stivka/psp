@@ -22,7 +22,6 @@ public class CustomerController {
         this.customerService = customerService;
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping()
     public ResponseEntity<Customer> getCustomerById(@RequestParam Long customerId) {
         Optional<Customer> customer = customerService.getCustomer(customerId);

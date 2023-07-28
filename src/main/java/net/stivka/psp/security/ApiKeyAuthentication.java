@@ -23,7 +23,6 @@ public class ApiKeyAuthentication implements Authentication {
 
     @Override
     public Object getCredentials() {
-        // The API key is the "credential" in this case
         return apiKey.getKey();
     }
 

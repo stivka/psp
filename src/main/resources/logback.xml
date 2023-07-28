@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+    <include resource="org/springframework/boot/logging/logback/base.xml" />
 
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>./logs/all_logs.log</file>
@@ -19,16 +19,21 @@
         </encoder>
     </appender>
 
-    <root level="DEBUG">
+    <root level="TRACE">
         <appender-ref ref="CONSOLE" />
         <!-- <appender-ref ref="FILE" /> -->
     </root>
 
-    <!-- if additivity is set to false, then the root level will not apply and the logger will log irrespectively. 
+    <logger name="org.springframework.security" level="TRACE">
+        <appender-ref ref="CONSOLE" />
+    </logger>
+
+    <!-- if additivity is set to false, then the root level will not apply and the logger will log
+    irrespectively. 
     Default is true or to just omit the attribute -->
     <!-- <logger name="org.hibernate.SQL" level="INFO" additivity="false"> -->
-        <!-- <appender-ref ref="CONSOLE" /> -->
-        <!-- <appender-ref ref="FILE" /> -->
+    <!-- <appender-ref ref="CONSOLE" /> -->
+    <!-- <appender-ref ref="FILE" /> -->
     <!-- </logger> -->
 
     <logger name="org.hibernate.SQL" level="INFO">

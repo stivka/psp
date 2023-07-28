@@ -7,3 +7,5 @@ select * from merchant;
 select * from payment;
 
 select * from api_key;
+
+select * from app_user;

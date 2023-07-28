@@ -1,6 +1,8 @@
 package net.stivka.psp.security;
 
 import java.io.IOException;
+
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.GenericFilterBean;
 
 import jakarta.servlet.FilterChain;
@@ -36,10 +38,11 @@ public class ApiKeyAuthFilter extends GenericFilterBean {
 
         boolean isApiKeyValid = userService.checkApiKey(userId, apiKey);
 
-        System.out.println("DB API Key: " + userService.getUser(userId).get().getApiKey().getKey());
-        System.out.println("Given API Key: " + apiKey);
-
-        if (!isApiKeyValid) {
+        if (isApiKeyValid) {
+            ApiKey apiKeyObject = userService.getUser(userId).get().getApiKey();
+            ApiKeyAuthentication authentication = new ApiKeyAuthentication(apiKeyObject);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+        } else {
             ((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid API key");
             return;
         }

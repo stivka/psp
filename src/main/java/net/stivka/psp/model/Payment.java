@@ -3,6 +3,7 @@ package net.stivka.psp.model;
 import java.math.BigDecimal;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.Entity;
@@ -35,9 +36,11 @@ public class Payment extends Auditable<String> {
     private BigDecimal amount;
 
     @ManyToOne
+    @JsonIdentityReference(alwaysAsId = true)
     private Customer customer;
 
     @ManyToOne
+    @JsonIdentityReference(alwaysAsId = true)
     private Merchant merchant;
 
     @Enumerated(EnumType.STRING)
