@@ -33,6 +33,8 @@ public class ApiKeyAuthFilter extends GenericFilterBean {
             throws IOException, ServletException {
 
         HttpServletRequest httpRequest = (HttpServletRequest) request;
+        // perhaps add a message to the response, if the header is missing
+        // the api key or user id
         String apiKey = httpRequest.getHeader(headerName);
         Long userId = Long.valueOf(httpRequest.getHeader(USER_ID));
 
