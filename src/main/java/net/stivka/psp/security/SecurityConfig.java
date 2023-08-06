@@ -11,6 +11,8 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 
 import net.stivka.psp.service.UserService;
 
+// import static org.springframework.security.config.Customizer.withDefaults;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -22,7 +24,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 // .csrf(withDefaults())
-                // later set up csrf tokens. POST requests will not work without them
+                // later set up csrf tokens
+                // by default csrf protection applies to 'state changing' operations such as post, put, patch, delete
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(new ApiKeyAuthFilter("X-API-Key", userService), BasicAuthenticationFilter.class)

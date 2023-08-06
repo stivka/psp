@@ -16,11 +16,7 @@ public class MerchantService {
         this.merchantRepository = merchantRepository;
     }
 
-    public Optional<Merchant> findById(Long id) {
+    public Optional<Merchant> getMerchant(Long id) {
         return merchantRepository.findById(id);
-    }
-
-    public Merchant saveMerchant() {
-        return null;
     }
 }

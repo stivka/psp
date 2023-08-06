@@ -3,7 +3,6 @@ package net.stivka.psp.controller;
 import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,14 +21,9 @@ public class MerchantController {
         this.merchantService = merchantService;
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping()
     public ResponseEntity<Merchant> getMerchantById(@RequestParam Long id) {
-        Optional<Merchant> merchant = merchantService.findById(id);
+        Optional<Merchant> merchant = merchantService.getMerchant(id);
         return merchant.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
-    // @PostMapping
-    // public ResponseEntity<Merchant> saveMerchant() {
-    //     Merchant savedMerchant = merchantService.saveMerchant();
-    // }
 }

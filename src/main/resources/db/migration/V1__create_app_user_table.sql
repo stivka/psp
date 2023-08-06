@@ -9,5 +9,6 @@ CREATE TABLE app_user (
     created_by VARCHAR(255),
     creation_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     last_modified_by VARCHAR(255),
-    last_modified_date TIMESTAMP
+    last_modified_date TIMESTAMP, 
+    user_type VARCHAR(255) -- added for trying to solve a Hibernate mapping problem
 );

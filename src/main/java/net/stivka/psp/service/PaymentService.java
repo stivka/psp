@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import net.stivka.psp.model.Payment;
 import net.stivka.psp.model.User;
@@ -11,17 +12,18 @@ import net.stivka.psp.dto.PaymentRequest;
 import net.stivka.psp.model.Customer;
 import net.stivka.psp.model.Merchant;
 import net.stivka.psp.repository.PaymentRepository;
-import net.stivka.psp.repository.UserRepository;
 
 @Service
 public class PaymentService {
 
     private final PaymentRepository paymentRepository;
-    private final UserRepository userRepository;
+    private final UserService userService;
+    // private final MerchantService merchantService;
+    // private final CustomerService customerService;
 
-    public PaymentService(PaymentRepository paymentRepository, UserRepository userRepository) {
+    public PaymentService(PaymentRepository paymentRepository, UserService userService) {
         this.paymentRepository = paymentRepository;
-        this.userRepository = userRepository;
+        this.userService = userService;
     }
 
     public List<Payment> getPayments() {
@@ -31,11 +33,11 @@ public class PaymentService {
     public Optional<Payment> getPayment(Long id) {
         return paymentRepository.findById(id);
     }
-
+    
+    @Transactional
     public Payment savePayment(PaymentRequest paymentRequest) {
-        // Hibernate will return an instance of the subclass of Customer or Merchant
-        Optional<User> senderOptional = userRepository.findById(paymentRequest.getSenderId());
-        Optional<User> receiverOptional = userRepository.findById(paymentRequest.getReceiverId());
+        Optional<User> senderOptional = userService.getUser(paymentRequest.getSenderId());
+        Optional<User> receiverOptional = userService.getUser(paymentRequest.getReceiverId());
     
         if (!senderOptional.isPresent() || !receiverOptional.isPresent()) {
             throw new RuntimeException("Invalid sender or receiver");
@@ -45,14 +47,14 @@ public class PaymentService {
         User receiver = receiverOptional.get();
     
         Payment payment = new Payment();
-        
-        // Hibernate's JOINED inheritance strategy will create the Merchant or Customer object
-        if (sender instanceof Customer) {
-            payment.setCustomer((Customer) sender);
-            payment.setMerchant((Merchant) receiver);
-        } else {
-            payment.setCustomer((Customer) receiver);
-            payment.setMerchant((Merchant) sender);
+    
+        // If sender's customer is not null, then it's a customer
+        if (sender.getCustomer() != null) {
+            payment.setCustomer(sender.getCustomer());
+            payment.setMerchant(receiver.getMerchant());
+        } else { // if sender's customer is null, it must be a merchant
+            payment.setCustomer(receiver.getCustomer());
+            payment.setMerchant(sender.getMerchant());
         }
     
         payment.setAmount(paymentRequest.getAmount());

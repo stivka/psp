@@ -1,7 +1,6 @@
 package net.stivka.psp.model;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import java.util.List;
 
@@ -9,17 +8,30 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.PrimaryKeyJoinColumn;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.SequenceGenerator;
 
 @Entity
 @Data
-@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
-@PrimaryKeyJoinColumn(name = "id")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class Merchant extends User {
+public class Merchant {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "merchant_seq_generator")
+    @SequenceGenerator(name = "merchant_seq_generator", sequenceName = "merchant_seq", allocationSize = 1)
+    private Long id;
+
+    @OneToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
 
     @OneToMany(mappedBy = "merchant")
     @JsonIgnore

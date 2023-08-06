@@ -3,6 +3,7 @@ package net.stivka.psp.service;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import net.stivka.psp.model.User;
 import net.stivka.psp.repository.UserRepository;
@@ -16,6 +17,8 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
+    // this allows apiKey to be lazily loaded, because the transaction will be left open
+    @Transactional(readOnly = true)
     public boolean checkApiKey(Long userId, String apiKey) {
         Optional<User> userOptional = getUser(userId);
         if (!userOptional.isPresent()) {
