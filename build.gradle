@@ -38,6 +38,10 @@ dependencies {
 	runtimeOnly 'org.postgresql:postgresql'
 	implementation 'org.flywaydb:flyway-core'
 	implementation 'p6spy:p6spy:3.9.1'
+	// Jasypt's Spring Boot integration isn't managed by the official Spring Boot BOM
+	// that means spring-dependency-management can't figure out the version number 
+	// and it must be provided
+	implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -49,3 +53,8 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+// when the bootRun task is run, pass the variable from your OS to the application
+// bootRun {
+//     environment "JASYPT_ENCRYPTOR_PASSWORD", System.getenv('JASYPT_ENCRYPTOR_PASSWORD')
+// }

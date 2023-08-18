@@ -11,5 +11,4 @@ public class PspApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(PspApplication.class, args);
 	}
-
 }

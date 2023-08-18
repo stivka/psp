@@ -25,13 +25,17 @@ public class SecurityConfig {
         http
                 // .csrf(withDefaults())
                 // later set up csrf tokens
-                // by default csrf protection applies to 'state changing' operations such as post, put, patch, delete
+                // by default csrf protection applies to 'state changing' operations such as
+                // post, put, patch, delete
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(new ApiKeyAuthFilter("X-API-Key", userService), BasicAuthenticationFilter.class)
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers("/**").permitAll()
-                        .anyRequest().authenticated());
+                        .anyRequest().authenticated())
+                .requiresChannel(channel -> channel
+                        .anyRequest()
+                        .requiresSecure());
         return http.build();
     }
 }
