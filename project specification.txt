@@ -1,17 +1,11 @@
 E-commerce PSP
 
-use Kafka for message queue practice
-
 acquiring bank
 issuing bank
 Payment Card Industry Data Security Standard (PCI-DSS)
 
 card network (visa or mastercard)
 the card network's role is to ensure that the payment can be made from any bank in their network to any other bank in their netwok, anywhere around the world.
-
-1. customer
-
-2. merchant
 
 3. Payment Service Provider (PSP) - Service between objects e-shop and payment gateway and between subjects merchant, customer and financial institutions involved in processing payments. Stripe, PayPal, Ayden, Square, Braintree, Authorize.Net
 
@@ -26,10 +20,11 @@ Let's say, for example, your PSP is set up to handle credit card payments direct
 
 TODO:
 Use JWT tokens instead of API keys, which is more in line with the stateless manner of
-REST APIs. No need to look up users with every request and they are tamper-proof. 
-TLS
+REST APIs. No need to look up users with every request and they are tamper-proof.
+tests
 OpenApi
 Host on cloud
+Kafka for message queueing
 
 
 
