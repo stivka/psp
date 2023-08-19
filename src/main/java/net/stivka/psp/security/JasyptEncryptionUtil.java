@@ -16,8 +16,8 @@ public class JasyptEncryptionUtil {
 
         // String encryptorPassword = args[0];
         // String textToEncrypt = args[1];
-        String encryptorPassword = "EncryptorPassword";
-        String textToEncrypt = "psp_service";
+        String encryptorPassword = "";
+        String textToEncrypt = "";git
 
         PooledPBEStringEncryptor encryptor = new PooledPBEStringEncryptor();
         SimpleStringPBEConfig config = new SimpleStringPBEConfig();
