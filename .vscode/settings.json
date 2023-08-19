@@ -1,0 +1,28 @@
+// this file contains folder-specific settings that override workspace and user settings
+{
+    // "java.home": "/path_to_your_jdk",
+    "java.project.outputPath": "build",
+    "java.compile.nullAnalysis.mode": "automatic",
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "psp_admin@psp",
+            "database": "psp",
+            "username": "psp_admin"
+        },
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "psp_service@psp",
+            "database": "psp",
+            "username": "psp_service"
+        }
+    ],
+    "terminal.integrated.defaultProfile.windows": "Git Bash"
+}

@@ -11,8 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.context.request.RequestAttributes;
-import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.context.request.ServletWebRequest;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,7 +27,6 @@ public class PspErrorController implements ErrorController {
 
     @RequestMapping("/error")
     public ResponseEntity<ApiError> handleError(HttpServletRequest request) {
-        RequestAttributes requestAttributes = new ServletRequestAttributes(request);
         ServletWebRequest servletWebRequest = new ServletWebRequest(request);
 
         Map<String, Object> errorMap = this.errorAttributes.getErrorAttributes(servletWebRequest, ErrorAttributeOptions.defaults());

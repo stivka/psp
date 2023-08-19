@@ -63,15 +63,4 @@ public class User extends Auditable<String> {
     @EqualsAndHashCode.Exclude
     private Merchant merchant;
 
-    // // since Merchant and Customer are lazily loaded
-    // @Override
-    // public String toString() {
-    //     return "User{" +
-    //             "id=" + id +
-    //             ", fullName='" + fullName + '\'' +
-    //             ", email='" + email + '\'' +
-    //             ", password='" + password + '\'' +
-    //             // don't include apiKey, customer, merchant
-    //             '}';
-    // }
 }

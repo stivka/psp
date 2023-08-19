@@ -25,7 +25,7 @@ public class ApiKey {
     @Column(name = "key_value", nullable = false)
     private String key;
 
-    // we don't want api keys to me modified after creation, so lets add only creation fields
+    // we don't want api keys to me modified after creation, so lets use only creation fields
     @CreatedBy
     protected String createdBy;
 

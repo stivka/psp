@@ -9,8 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 import net.stivka.psp.model.Payment;
 import net.stivka.psp.model.User;
 import net.stivka.psp.dto.PaymentRequest;
-import net.stivka.psp.model.Customer;
-import net.stivka.psp.model.Merchant;
 import net.stivka.psp.repository.PaymentRepository;
 
 @Service
@@ -18,8 +16,6 @@ public class PaymentService {
 
     private final PaymentRepository paymentRepository;
     private final UserService userService;
-    // private final MerchantService merchantService;
-    // private final CustomerService customerService;
 
     public PaymentService(PaymentRepository paymentRepository, UserService userService) {
         this.paymentRepository = paymentRepository;
@@ -60,7 +56,6 @@ public class PaymentService {
         payment.setAmount(paymentRequest.getAmount());
         payment.setPaymentMethod(paymentRequest.getPaymentMethod());
     
-        // Save the new payment
         return paymentRepository.save(payment);
     }
 

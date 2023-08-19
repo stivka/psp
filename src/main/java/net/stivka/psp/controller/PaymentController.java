@@ -64,7 +64,4 @@ public class PaymentController {
         Payment savedPayment = paymentService.savePayment(paymentRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedPayment);
     }
-
-    // PUT /payments/{paymentId}: To update a payment, such as marking it as
-    // completed or failed.
 }

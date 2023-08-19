@@ -1,9 +1,12 @@
 HELP.md
 .gradle
 build/
+# When first running the project using the Gradle Wrapper, the gradle-wrapper.jar bootstraps the process by downloading 
+# the correct version of Gradle as specified in gradle-wrapper.properties.
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
+logs/
 
 ### STS ###
 .apt_generated
@@ -32,6 +35,3 @@ out/
 /dist/
 /nbdist/
 /.nb-gradle/
-
-### VS Code ###
-.vscode/
