@@ -33,6 +33,18 @@ public class ApiKeyAuthFilter extends GenericFilterBean {
             throws IOException, ServletException {
 
         HttpServletRequest httpRequest = (HttpServletRequest) request;
+
+        System.out.println("Filter executed for path: " + httpRequest.getRequestURI());
+
+        // Bypass the filter for Swagger UI endpoint
+        String path = httpRequest.getRequestURI();
+        // If the path doesn't start with /api/, just continue the chain and bypass the
+        // filter logic
+        if (!path.startsWith("/api/")) {
+            chain.doFilter(request, response);
+            return;
+        }
+
         // perhaps add a message to the response, if the header is missing
         // the api key or user id
         String apiKey = httpRequest.getHeader(headerName);
